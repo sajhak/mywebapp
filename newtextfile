@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<proxy xmlns="http://ws.apache.org/ns/synapse"
+       name="StockQuoteProxy"
+       transports="vfs"
+       statistics="disable"
+       trace="disable"
+       startOnLoad="true">
+   <target>
+      <outSequence>
+         <property name="transport.vfs.ReplyFileName"
+                   expression="fn:concat(fn:substring-after(get-property('MessageID'), 'urn:uuid:'), '.xml')"
+                   scope="transport"/>
+         <property name="OUT_ONLY" value="true"/>
+         <send>
+            <endpoint>
+               <address uri="vfs:file:///home/sajith/test/ftp/out"/>
+            </endpoint>
+         </send>
+      </outSequence>
+      <endpoint>
+         <address uri="http://localhost:9000/services/SimpleStockQuoteService"
+                  format="soap12"/>
+      </endpoint>
+   </target>
+   <publishWSDL uri="file:repository/samples/resources/proxy/sample_proxy_1.wsdl"/>
+   <parameter name="transport.PollInterval">15</parameter>
+   <parameter name="transport.vfs.ActionAfterProcess">MOVE</parameter>
+   <parameter name="transport.vfs.FileURI">vfs:ftp://sajith:wso2123@localhost/home/sajith/test/ftp/in</parameter>
+   <parameter name="transport.vfs.MoveAfterProcess">vfs:ftp://sajith:wso2123@localhost/test/ftp/original</parameter>
+   <parameter name="transport.vfs.MoveAfterFailure">vfs:ftp://sajith:wso2123@localhost/test/ftp/original</parameter>
+   <parameter name="transport.vfs.FileNamePattern">.*\.xml</parameter>
+   <parameter name="transport.vfs.ContentType">text/xml</parameter>
+   <parameter name="transport.vfs.ActionAfterFailure">MOVE</parameter>
+   <description/>
+</proxy>
+
+
+
+
+
+
+
+
+
+ftp://username:password@hostname/
+
+
+
+
+
+<proxy xmlns="http://ws.apache.org/ns/synapse" name="StockQuoteProxy" transports="vfs" statistics="disable" trace="disable" startOnLoad="true">
+   <target>
+      <outSequence>
+         <property name="transport.vfs.ReplyFileName" expression="fn:concat(fn:substring-after(get-property('MessageID'), 'urn:uuid:'), '.xml')" scope="transport"/>
+         <property name="OUT_ONLY" value="true"/>
+         <send>
+            <endpoint>
+               <address uri="vfs:file:///home/sajith/test/out"/>
+            </endpoint>
+         </send>
+      </outSequence>
+      <endpoint>
+         <address uri="http://localhost:9000/services/SimpleStockQuoteService" format="soap12"/>
+      </endpoint>
+   </target>
+   <publishWSDL uri="file:repository/samples/resources/proxy/sample_proxy_1.wsdl"/>
+   <parameter name="transport.vfs.ActionAfterProcess">MOVE</parameter>
+   <parameter name="transport.PollInterval">15</parameter>
+   <parameter name="transport.vfs.MoveAfterProcess">file:///home/sajith/test/original</parameter>
+   <parameter name="transport.vfs.FileURI">file:///home/sajith/test/in</parameter>
+   <parameter name="transport.vfs.MoveAfterFailure">file:///home/sajith/test/original</parameter>
+   <parameter name="transport.vfs.FileNamePattern">.*.xml</parameter>
+   <parameter name="transport.vfs.ContentType">text/xml</parameter>
+   <parameter name="transport.vfs.ActionAfterFailure">MOVE</parameter>
+   <description></description>
+</proxy>
+                                
+                                
